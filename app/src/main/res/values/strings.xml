@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">gk1</string>
+    <string name="load_image_to_firebase">Load image to Firebase</string>
+</resources>
