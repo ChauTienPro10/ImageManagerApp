@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "501296509498",
+    "project_id": "manager-image",
+    "storage_bucket": "manager-image.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:501296509498:android:8a9536e61f5fb52f74fb03",
+        "android_client_info": {
+          "package_name": "com.example.manager_image"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAC1OUx7zpJIqlFqY3crYPVR5rKebSjrv8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
