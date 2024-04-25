@@ -35,16 +35,39 @@
         android:textColor="@color/lavender"
         android:id="@+id/recyclerCaption"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:weightSum="2">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:layout_marginTop="10dp"
-        android:layout_width="wrap_content"
-        android:id="@+id/downlButton"
-        android:layout_gravity="center"
-        android:background="@drawable/button_3state"
-        android:textColor="@color/white"
-        android:text="Download"
-        android:layout_height="wrap_content"/>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/downlButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:layout_marginRight="5dp"
+            android:layout_gravity="center"
+            android:background="@drawable/button_3state"
+            android:textColor="@color/white"
+            android:text="Download" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/delButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:background="@drawable/button_3state"
+            android:textColor="@color/white"
+            android:text="Delete" />
+
+    </LinearLayout>
+
 
 
 </LinearLayout>

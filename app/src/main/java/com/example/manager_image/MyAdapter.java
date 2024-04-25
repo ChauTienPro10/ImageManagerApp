@@ -1,5 +1,6 @@
 package com.example.manager_image;
 
+import static androidx.core.content.ContextCompat.startActivities;
 import static androidx.core.content.ContextCompat.startActivity;
 
 import android.annotation.SuppressLint;
@@ -22,6 +23,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -59,6 +67,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Glide.with(context).load(dataList.get(position).getImageURL()).into(holder.recyclerImage);
         holder.recyclerCaption.setText(dataList.get(position).getCaption());
+        holder.mdelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                delete_image(dataList.get(position),context);
+                Intent intent = new Intent(context, MainActivity.class);
+                context.startActivity(intent);
+            }
+        });
         holder.mdownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,12 +127,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         TextView recyclerCaption;
 
         AppCompatButton mdownload;
+        AppCompatButton mdelete;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             recyclerImage = itemView.findViewById(R.id.recyclerImage);
             recyclerCaption = itemView.findViewById(R.id.recyclerCaption);
             mdownload=itemView.findViewById(R.id.downlButton);
-
+            mdelete=itemView.findViewById(R.id.delButton);
 
 
         }
@@ -136,5 +153,40 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
 
         return randomString;
+    }
+
+    private void delete_image(DataClass data, Context context) {
+        ProgressDialog progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage("Deleting...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Images");
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    DataClass dataClass = snapshot.getValue(DataClass.class);
+                    if (dataClass.getImageURL().equals(data.getImageURL())) {
+                        snapshot.getRef().removeValue();
+                        StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(data.getImageURL());
+
+                        // Delete the file from Firebase Storage
+                        storageReference.delete().addOnSuccessListener(aVoid -> {
+                            Toast.makeText(context, "Delete success!", Toast.LENGTH_SHORT).show();
+                        }).addOnFailureListener(exception -> {
+                            Toast.makeText(context, "Failed to delete", Toast.LENGTH_SHORT).show();
+                        });
+                    }
+                }
+                progressDialog.dismiss();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(context, "Failed to delete on cancel", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+            }
+        });
     }
 }
